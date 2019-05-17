@@ -1,0 +1,9 @@
+<div class="job-container">
+  <div *ngFor="let p of parts; let i = index">
+    <div *ngIf="i > 0" class="job"
+      [style.width.px]="parts[i].length"
+      [style.background-color]="parts[i].color">
+        {{parts[i].name}}
+    </div>
+  </div>
+</div>

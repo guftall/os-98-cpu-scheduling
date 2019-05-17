@@ -1,0 +1,25 @@
+.job-container {
+  height: 50px;
+  min-height: 50px;
+  width: 100%;
+  background-color: rgba(49, 49, 49, 0.253);
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.job {
+  min-height: 50px;
+  min-width: 1px;
+  height: 100%;
+  width: 20px;
+  background-color: rgba(0, 0, 0, 1);
+  color: white;
+  display: inline-block;
+  float: left;
+  border-left: 1px dashed white;
+}
+
+div {
+  transition-duration: 200ms;
+}
