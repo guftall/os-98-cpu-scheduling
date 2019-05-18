@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Job } from '../Job';
 
 @Component({
   selector: 'app-jobs',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JobsComponent implements OnInit {
 
-  constructor() { }
+  @Input("jobs") private jobs: Job[];
+  constructor() {
+  }
 
   ngOnInit() {
+  }
+  addJob() {
+
+    var job = new Job();
+    job.id = this.jobs.length + 1;
+    this.jobs.push(job);
   }
 
 }

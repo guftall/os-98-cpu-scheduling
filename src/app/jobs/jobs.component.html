@@ -1,3 +1,10 @@
-<p>
-  jobs works!
-</p>
+<div>
+  <div *ngFor="let job of jobs">
+    <label for="arrival">Arrival time</label>
+    <input [(ngModel)]="job.arrivalTime" type="number" id="arrival" name="arrival">
+
+    <label for="burst">Burst time</label>
+    <input [(ngModel)]="job.burstTime" type="number" id="burst" name="burst">
+  </div>
+  <button (click)="addJob()">Add job</button>
+</div>

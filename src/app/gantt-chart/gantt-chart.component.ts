@@ -51,6 +51,14 @@ export class GanttChartComponent implements OnInit, OnDestroy {
       return;
     }
 
+    var allJobs = that.scheduler.jobs;
+    for (var i=0; i<allJobs.length; i++) {
+
+      var j = allJobs[i];
+      j.remainingTime = j.burstTime;
+      that.doWork(i);
+    }
+
     this.timer = setInterval(() => {
 
       var current: Job = that.scheduler.current.bind(that.scheduler)();
@@ -60,7 +68,7 @@ export class GanttChartComponent implements OnInit, OnDestroy {
 
         var part = new GanttPart();
         part.name = "";
-        part.color = "red";
+        part.color = "#e51c23";
         that.parts.push(part);
         part.margin = that.calculateMargin.bind(that)(that.parts.length - 1);
       }
@@ -86,9 +94,23 @@ export class GanttChartComponent implements OnInit, OnDestroy {
 
     }, TIMER_MS)
   }
+
+  doWork(index: number) {
+
+    var that = this;
+    setTimeout(() => {
+      var j = that.scheduler.jobs[index];
+      that.scheduler.jobQueue.splice(0, 0, j);
+      console.log(`Job ${j.name.bind(j)()} entered`)
+    }, that.scheduler.jobs[index].arrivalTime * TIMER_MS);
+  }
   stopTimer() {
     clearInterval(this.timer);
     this.timer = undefined;
+    this.parts = [];
+    this.isIdle = false;
+    this.prev = undefined;
+    this.scheduler.reset();
   }
   ngOnDestroy(): void {
     this.startSubscription.unsubscribe();

@@ -1,6 +1,6 @@
 export class Job {
   id: number;
-  enterTime: number;
+  arrivalTime: number;
   burstTime: number;
 
   quantum: number;
@@ -10,7 +10,8 @@ export class Job {
 
   constructor() {
     this.burstTime = 0;
-    this.enterTime = 0;
+    this.arrivalTime = 0;
+    this.remainingTime = 0;
     this.backgroundColor = getRandomColor();
   }
 

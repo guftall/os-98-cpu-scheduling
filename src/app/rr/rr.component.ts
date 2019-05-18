@@ -20,35 +20,18 @@ export class RrComponent implements OnInit {
   }
 
   ngOnInit() {
-    var that = this;
-    this.gChartService.startChart();
-    var job = new Job();
-    job.id = 1;
-    job.burstTime = 100;
-    job.enterTime = 0;
-    that.scheduler.add(job);
-
-    var job = new Job();
-    job.id = 2;
-    job.burstTime = 100;
-    job.enterTime = 0;
-    that.scheduler.add(job);
-
-    var job = new Job();
-    job.id = 3;
-    job.burstTime = 80;
-    job.enterTime = 80;
-    that.scheduler.add(job);
   }
 }
 
 export const RR_QUANTOM = 50;
 class RoundRobinScheduler implements Scheduler {
+  jobs: Job[];
   _current: Job;
   jobQueue: Job[];
 
   constructor() {
     this.jobQueue = [];
+    this.jobs = [];
   }
   next(): Job {
     if (this.jobQueue.length == 0) {
@@ -57,7 +40,6 @@ class RoundRobinScheduler implements Scheduler {
 
     var next = this.jobQueue.splice(this.jobQueue.length - 1, 1)[0];
     next.quantum = RR_QUANTOM;
-    console.log(this.jobQueue)
     return next;
   };
   current(): Job {
@@ -81,17 +63,14 @@ class RoundRobinScheduler implements Scheduler {
     return this._current;
   };
   add(job: Job) {
-    if (job.burstTime < 0 || job.enterTime < 0) {
+    if (job.burstTime < 0 || job.arrivalTime < 0) {
       return;
     }
-
-    job.remainingTime = job.burstTime;
-
-    var that = this;
-    setTimeout(() => {
-      that.jobQueue.splice(0, 0, job);
-      console.log(`Job ${job.name()} entered`)
-    }, job.enterTime * TIMER_MS)
+    this.jobs.push(job);
+  }
+  reset() {
+    this.jobQueue.splice(0, this.jobQueue.length);
+    this._current = undefined;
   }
 
 }
