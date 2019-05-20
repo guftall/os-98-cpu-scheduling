@@ -42,7 +42,6 @@ class ShortestJobFirstScheduler implements Scheduler {
   }
 
   next(): Job {
-    console.log(this.jobQueue);
     if (this.jobQueue.length == 0) {
       return undefined;
     }
@@ -95,6 +94,4 @@ class ShortestJobFirstScheduler implements Scheduler {
   reset() {
 
   }
-
-
 }
