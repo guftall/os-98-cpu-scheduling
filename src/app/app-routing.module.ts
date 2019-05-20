@@ -8,7 +8,7 @@ import { SrtnComponent } from './srtn/srtn.component';
 const routes: Routes = [
   {path: 'FirstComeFirstServe', component: FcfsComponent},
   {path: 'RoundRobin', component: RrComponent},
-  {path: 'SmallestJobFirst', component: SjfComponent},
+  {path: 'ShortestJobFirst', component: SjfComponent},
   {path: 'ShortestRemainingTimeNext', component: SrtnComponent}
 ];
 

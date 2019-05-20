@@ -9,5 +9,5 @@ export interface Scheduler {
   current: () => Job;
   add: (job: Job) => void;
   reset: () => void;
-
+  jobReceived: (job: Job) => void;
 }

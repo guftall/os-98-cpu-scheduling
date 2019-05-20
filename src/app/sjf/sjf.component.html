@@ -1,3 +1,6 @@
-<p>
-  sjf works!
-</p>
+<app-jobs [jobs]="scheduler.jobs"></app-jobs>
+
+<button (click)="gChartService.startChart()">Start</button>
+<button (click)="gChartService.stopChart()">Stop</button>
+
+<app-gantt-chart [scheduler]="scheduler" (jobReceived)="jobReceived($event)"></app-gantt-chart>

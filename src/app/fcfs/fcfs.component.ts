@@ -20,6 +20,12 @@ export class FcfsComponent implements OnInit {
 
   ngOnInit() {
   }
+  jobReceived(jobId: string) {
+
+    var index = +jobId;
+    var j = this.scheduler.jobs[index];
+    this.scheduler.jobReceived(j);
+  }
 
 }
 
@@ -66,6 +72,12 @@ class FirstComeFirstServeScheduler implements Scheduler{
       return;
     }
     this.jobs.push(job);
+  }
+  jobReceived(job: Job) {
+
+    job.remainingTime = job.burstTime;
+    this.jobQueue.splice(0, 0, job);
+    console.log(`Job ${job.name.bind(job)()} entered`)
   }
   reset() {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Job } from '../Job';
 import { GanttChartService } from './gantt-chart.service';
 import { Subscription } from 'rxjs';
@@ -13,6 +13,7 @@ export const TIMER_MS = 50;
 export class GanttChartComponent implements OnInit, OnDestroy {
 
   @Input() scheduler: Scheduler;
+  @Output() jobReceived = new EventEmitter();
   startSubscription: Subscription;
   stopSubscription: Subscription;
   timer;
@@ -64,8 +65,8 @@ export class GanttChartComponent implements OnInit, OnDestroy {
 
       for (var i=0; i<allJobs.length; i++) {
 
-        if (allJobs[i].remainingTime == -1 && allJobs[i].arrivalTime <= that.now * TIMER_MS) {
-          that.doWork(i);
+        if (allJobs[i].remainingTime == -1 && allJobs[i].arrivalTime <= that.now) {
+          that.jobReceived.emit(`${i}`);
         }
       }
 
@@ -101,14 +102,6 @@ export class GanttChartComponent implements OnInit, OnDestroy {
 
       ++that.now;
     }, TIMER_MS)
-  }
-
-  doWork(index: number) {
-
-    var j = this.scheduler.jobs[index];
-    j.remainingTime = j.burstTime;
-    this.scheduler.jobQueue.splice(0, 0, j);
-    console.log(`Job ${j.name.bind(j)()} entered`)
   }
   stopTimer() {
     clearInterval(this.timer);
