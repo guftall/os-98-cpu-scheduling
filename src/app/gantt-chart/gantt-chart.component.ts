@@ -4,7 +4,7 @@ import { GanttChartService } from './gantt-chart.service';
 import { Subscription } from 'rxjs';
 import { Scheduler } from '../Scheduler';
 
-export const TIMER_MS = 200;
+export const TIMER_MS = 50;
 @Component({
   selector: 'app-gantt-chart',
   templateUrl: './gantt-chart.component.html',
