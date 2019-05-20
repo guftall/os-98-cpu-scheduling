@@ -4,7 +4,7 @@ import { GanttChartService } from './gantt-chart.service';
 import { Subscription } from 'rxjs';
 import { Scheduler } from '../Scheduler';
 
-export const TIMER_MS = 50;
+export const TIMER_MS = 200;
 @Component({
   selector: 'app-gantt-chart',
   templateUrl: './gantt-chart.component.html',
@@ -19,11 +19,12 @@ export class GanttChartComponent implements OnInit, OnDestroy {
   parts: GanttPart[];
   isIdle: boolean;
   prev: Job;
+  now: number;
   constructor(
     private ganttChartService: GanttChartService
   ) {
-    this.parts = [];
-    this.parts.push({length: 0, color: "", margin: 0, name: ""})
+    this.now = 0;
+    this.initParts();
     this.isIdle = false;
     this.startSubscription = ganttChartService.$startChart.subscribe(() => {
       this.start.bind(this)();
@@ -32,6 +33,11 @@ export class GanttChartComponent implements OnInit, OnDestroy {
       this.stopTimer.bind(this)();
     })
 
+  }
+  initParts() {
+
+    this.parts = [];
+    this.parts.push({length: 0, color: "", margin: 0, name: ""})
   }
 
   ngOnInit() {
@@ -45,21 +51,23 @@ export class GanttChartComponent implements OnInit, OnDestroy {
   }
   start() {
     let that = this;
+    this.initParts();
     if (this.timer != undefined)
     {
       alert('Timer is already started');
       return;
     }
-
     var allJobs = that.scheduler.jobs;
-    for (var i=0; i<allJobs.length; i++) {
 
-      var j = allJobs[i];
-      j.remainingTime = j.burstTime;
-      that.doWork(i);
-    }
 
     this.timer = setInterval(() => {
+
+      for (var i=0; i<allJobs.length; i++) {
+
+        if (allJobs[i].remainingTime == -1 && allJobs[i].arrivalTime <= that.now * TIMER_MS) {
+          that.doWork(i);
+        }
+      }
 
       var current: Job = that.scheduler.current.bind(that.scheduler)();
 
@@ -91,23 +99,21 @@ export class GanttChartComponent implements OnInit, OnDestroy {
 
       ++that.parts[that.parts.length - 1].length;
 
-
+      ++that.now;
     }, TIMER_MS)
   }
 
   doWork(index: number) {
 
-    var that = this;
-    setTimeout(() => {
-      var j = that.scheduler.jobs[index];
-      that.scheduler.jobQueue.splice(0, 0, j);
-      console.log(`Job ${j.name.bind(j)()} entered`)
-    }, that.scheduler.jobs[index].arrivalTime * TIMER_MS);
+    var j = this.scheduler.jobs[index];
+    j.remainingTime = j.burstTime;
+    this.scheduler.jobQueue.splice(0, 0, j);
+    console.log(`Job ${j.name.bind(j)()} entered`)
   }
   stopTimer() {
     clearInterval(this.timer);
     this.timer = undefined;
-    this.parts = [];
+    // this.parts = [];
     this.isIdle = false;
     this.prev = undefined;
     this.scheduler.reset();

@@ -51,7 +51,7 @@ class RoundRobinScheduler implements Scheduler {
         return undefined;
       }
     }
-    if (this._current.remainingTime < 1) {
+    if (this._current.remainingTime == 0) {
 
       console.log(`Job ${this._current.name()} finished`);
       this._current = this.next();

@@ -11,7 +11,7 @@ export class Job {
   constructor() {
     this.burstTime = 0;
     this.arrivalTime = 0;
-    this.remainingTime = 0;
+    this.remainingTime = -1;
     this.backgroundColor = getRandomColor();
   }
 
